@@ -33,11 +33,6 @@ variable "ambiente" {
   description = ""
   default     = ""
 }
-variable "container_port" {
-  type        = string
-  description = ""
-  default     = ""
-}
 variable "tg_protocol" {
   type        = string
   description = ""
@@ -138,3 +133,8 @@ variable "subnets" {
     type    = list(string)
     default = []
 }
+#variable "container_port" {
+#  type        = string
+#  description = ""
+#  default     = ""
+#}
