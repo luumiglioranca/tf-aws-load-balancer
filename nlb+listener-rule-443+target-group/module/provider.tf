@@ -5,18 +5,15 @@
 ##################################################################################################
 
 locals {
-  alb_name                = ""
-  vpc_id                  = ""
-  account_id              = ""
-  cidr_blocks             = ""
-  alb_arn_to_nlb_listener = ""
-  domain_name             = ""
+  api_gateway_name         = ""
+  vpc_id                   = ""
+  account_id               = ""
+  alb_arn_to_nlb_listener  = ""
+ domain_name               = ""
 
   /* CONFIGURAÇÕES DO LOAD BALANCER & HEALTH CHECK (TARGET GROUP) */
-  health_check_path     = ""
-  container_port        = ""
-  target_group_protocol = ""
-  target_group_port     = ""
+  health_check_path = ""
+  container_port    = ""
 
   default_tags = {
     Area     = ""
@@ -24,11 +21,15 @@ locals {
   }
 
   # VARIÁVEIS GLOBAIS [PADRONIZADAS] - OBS: NÃO SE FAZ NECESSÁRIO REALIZAR A TROCA DE NENHUMA VARIÁVEL DESTE BLOCO !!!
-  https_port   = "443"
-  region       = "us-east-1"
-  target_type  = "alb"
-  alb_type     = "network"
-  alb_internal = "true"
+  alb_name              = "nlb-${data.aws_api_gateway_rest_api.main.name}"
+  target_group_protocol = "TCP"
+  target_group_port     = "443"
+  target_type           = "alb"
+  alb_type              = "network"
+  alb_internal          = "true"
+  region                = "us-east-1"
+  load_balancer_arn     = module.network_load_balancer.alb_arn
+  https_port            = "443"
 
   # VARIÁVEIS DO TARGET GROUP (NÃO MUDAR)
   healthy_threshold   = "3"
@@ -46,6 +47,7 @@ locals {
   security_group_type = "ingress"
   tcp_protocol        = "tcp"
 }
+
 
 #######################################################################################################
 #                                                                                                      #

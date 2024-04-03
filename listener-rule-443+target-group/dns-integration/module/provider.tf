@@ -5,15 +5,13 @@
 ##################################################################################################
 
 locals {
-  alb_name    = ""
-  vpc_id      = ""
-  account_id  = ""
-  domain_name = ""
-  cidr_blocks = ""
+  alb_name   = ""
+  vpc_id     = ""
+  account_id = ""
 
   /* CONFIGURAÇÕES DO CONTAINER */
-  container_port     = ""
   availability_zones = ""
+  load_balancer_arn  = ""
 
   /* CONFIGURAÇÕES DO LOAD BALANCER & HEALTH CHECK (TARGET GROUP) */
   health_check_path = ""
@@ -26,6 +24,7 @@ locals {
   }
 
   # VARIÁVEIS GLOBAIS [PADRONIZADAS] - OBS: NÃO SE FAZ NECESSÁRIO REALIZAR A TROCA DE NENHUMA VARIÁVEL DESTE BLOCO !!!
+  domain_name                        = "edtech.com.br"
   region                             = "us-east-1"
   cloudwatch_retention               = "14"
   launch_type                        = "EC2"
@@ -43,16 +42,18 @@ locals {
   unhealthy_threshold                = "2"
   load_balancer_port                 = "443"
   target_group_port                  = "80"
-  ssl_policy                         = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+  ssl_policy                         = "ELBSecurityPolicy-TLS13-1-2-FIPS-2023-04"
   deployment_minimum_healthy_percent = "100"
+  container_port                     = "3333"
 
   # CONFIGURAÇÕES INGRESS RULE - SECURITY GROUP*/
-  description         = "Acesso Interno"
+  description         = "Acesso Interno - VPC HUB"
   from_port           = "0"
   to_port             = "65535"
   protocol            = "tcp"
   security_group_type = "ingress"
   tcp_protocol        = "tcp"
+  cidr_blocks         = "10.107.40.0/22"
 }
 
 ########################################################################################################

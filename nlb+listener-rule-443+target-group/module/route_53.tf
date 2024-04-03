@@ -14,8 +14,8 @@ resource "aws_route53_record" "main" {
   provider = aws.sua_conta
 
   zone_id = data.aws_route53_zone.dns_zone.zone_id
-  name    = "${local.resource_name}.${local.domain_name}"
+  name    = "${local.alb_name}.${local.domain_name}"
   type    = "CNAME"
   ttl     = "10"
-  records = [module.application_load_balancer.dns_name]
+  records = [module.network_load_balancer.alb_name]
 }

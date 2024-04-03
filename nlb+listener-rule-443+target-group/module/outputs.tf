@@ -11,3 +11,7 @@ output "network_load_balancer_dns_name" {
 output "network_load_balancer_arn" {
   value = [module.network_load_balancer.arn]
 }
+
+output "vpc_link_id" {
+  value = [module.network_load_balancer.vpc_link_id]
+}

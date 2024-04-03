@@ -1,13 +1,14 @@
-############################################################################################
-#                                                                                          #
-#                       MÓDULO PARA CRIAÇÃO DO NETWORK LOAD BALANCER  :)                   #
-#                                                                                          #
-############################################################################################
+#########################################################################################################
+#                                                                                                       #
+#        MÓDULO PARA CRIAÇÃO DO NETWORK LOAD BALANCER [COMUNICAÇÃO COM UM API GATEWAY EXISTENTE] :)     #                        #
+#                                                                                                       #
+#########################################################################################################
 
 module "network_load_balancer" {
-  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//nlb+listener-rule-443+target-group/resource"
+  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//nlb+listener-rule-443+target-group+vpc-link/resource"
 
   alb_arn_to_nlb_listener = local.alb_arn_to_nlb_listener
+  vpc_link_name           = "vpc-link-${local.alb_name}"
 
   load_balancing_settings = [{
     name               = "${local.alb_name}"
@@ -17,7 +18,8 @@ module "network_load_balancer" {
 
     subnets = [
       data.aws_subnet.priv_1a.id,
-      data.aws_subnet.priv_1b.id,
+      data.aws_subnet.priv_1b.id
+      #data.aws_subnet.priv_1c.id
     ]
   }]
 
@@ -54,6 +56,7 @@ module "network_load_balancer" {
   default_tags = local.default_tags
 
 }
+
 
 ############################################################################################
 #                                                                                          #

@@ -1,12 +1,13 @@
-############################################################################################
-#                                                                                          #
-#                              OUTPUT APPLICATION LOAD BALANCER :)                         #
-#                                                                                          #
-############################################################################################
+##############################################################################################
+#                                                                                            #
+#                             OUTPUT APPLICATION LOAD BALANCER (ALB) :)                      #
+#                                                                                            #
+##############################################################################################
 
-output "application_load_balancer_dns_name" {
-  value = aws_route53_record.main.name
+output "dns_alb" {
+  value = aws_route53_record.application_load_balancer_dns.name
 }
-output "application_load_balancer_arn" {
+
+output "load_balancer_arn" {
   value = [module.application_load_balancer.arn]
 }

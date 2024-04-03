@@ -5,14 +5,7 @@
 ##############################################################################################################
 
 module "cloudfront_integration" {
-  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//load-balancer-rules/cloudfront-integration"
-
-  #Se precisar de regras iguais para mais de um DNS, utilizar a condição abaixo
-  for_each = toset([
-    "teste-1",
-    "teste-2",
-    "teste-3"
-  ])
+  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//listener-rule-443+target-group/cloudfront-integration/resource"
 
   port     = local.container_port
   name     = local.alb_name

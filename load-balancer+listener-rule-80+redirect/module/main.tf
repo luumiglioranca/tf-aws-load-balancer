@@ -5,74 +5,38 @@
 ############################################################################################
 
 module "application_load_balancer" {
-  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//load-balancer-only/resource"
+  source = "git@github.com:luumiglioranca/tf-aws-load-balancer.git//load-balancer+listener-rule-80+redirect/resource"
 
-  load_balancing_settings = [{
-    name                       = "${local.back_campus_digital_name}"
-    internal                   = "${local.alb_internal}"
-    load_balancer_type         = "${local.alb_type}"
-    target_protocol            = "${local.http_protocol}"
-    target_type                = "${local.target_type}"
-    port                       = "${local.container_port}"
-    target_port                = "${local.target_group_port}"
-    protocol                   = "${local.https_protocol}"
-    ssl_policy                 = "${local.ssl_policy}"
-    enable_deletion_protection = "false"
-    security_groups            = [module.back_campus_digital_sg.security_group_id]
-    vpc_id                     = data.aws_vpc.main.id
-    certificate_arn            = data.aws_acm_certificate.edtech_ssl.arn
+load_balancing_settings = [{
+    name               = "${local.alb_name}"
+    internal           = "${local.alb_internal}"
+    load_balancer_type = "${local.alb_type}"
+    security_groups    = [module.alb_security_group.security_group_id]
+    #subnets            = [local.subnets]
 
     subnets = [
       data.aws_subnet.priv_1a.id,
       data.aws_subnet.priv_1b.id,
+      #data.aws_subnet.priv_1c.id
     ]
   }]
 
-  target_group_settings = [{
-    name            = "tg-${local.resource_name}"
-    target_port     = "3333"
-    target_protocol = "HTTP"
-    target_type     = "instance"
-    vpc_id          = data.aws_vpc.selected.id
-
-    health_check = {
-      healthy_threshold   = "3"
-      interval            = "300"
-      protocol            = "HTTP"
-      matcher             = "200,301,302"
-      timeout             = "60"
-      path                = "/api/healthcheck"
-      unhealthy_threshold = "2"
-    }
-  }]
-
   load_balancing_listener_http = [{
-    port     = "80"
-    protocol = "HTTP"
+    port     = "${local.http_port}"
+    protocol = "${local.http_protocol}"
   }]
 
-  load_balancing_listener_https = [{
-    port            = "443"
-    protocol        = "HTTPS"
-    certificate_arn = data.aws_acm_certificate.edtech_ssl.arn
-    ssl_policy      = "ELBSecurityPolicy-2016-08"
-  }]
+  service_load_balancing_https = [{
 
-  default_tags = local.default_tags
-
-  listener_rule = [{
-
-    priority_rule = "1"
+    priority_rule = "${local.priority_rule}"
 
     redirect_rule = {
-      type = "redirect"
+      type = "${local.redirect_rule_type}"
 
       redirect = {
-        port            = "443"
-        protocol        = "HTTPS"
-        status_code     = "HTTP_301"
-        certificate_arn = data.aws_acm_certificate.edtech_ssl.arn
-        ssl_policy      = "ELBSecurityPolicy-2016-08"
+        port        = "${local.https_port}"
+        protocol    = "${local.https_protocol}"
+        status_code = "${local.status_code}"
       }
     }
 
@@ -82,6 +46,8 @@ module "application_load_balancer" {
       }
     }
   }]
+
+  default_tags = local.default_tags
 }
 
 ############################################################################################

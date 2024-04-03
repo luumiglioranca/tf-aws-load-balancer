@@ -6,8 +6,8 @@
 
 resource "aws_lb_listener" "listerner_https" {
   count = var.create && var.load_balancer_type == "application" ? length(var.load_balancing_listener_https) : 0
-  
-  load_balancer_arn  = var.load_balancer_arn
+
+  load_balancer_arn = var.load_balancer_arn
   port              = lookup(var.load_balancing_listener_https[count.index], "port", null)
   protocol          = lookup(var.load_balancing_listener_https[count.index], "protocol", null)
   certificate_arn   = lookup(var.load_balancing_listener_https[count.index], "certificate_arn", null)
@@ -69,15 +69,15 @@ resource "aws_lb_listener_rule" "listener_https" {
 resource "aws_lb_target_group" "main" {
   count = var.create ? length(var.target_group_settings) : 0
 
-  name        = lookup(var.target_group_settings[count.index], "name", null)
-  port        = lookup(var.target_group_settings[count.index], "target_port", null)
-  protocol    = lookup(var.target_group_settings[count.index], "target_protocol", null)
-  vpc_id      = lookup(var.target_group_settings[count.index], "vpc_id", null)
+  name     = lookup(var.target_group_settings[count.index], "name", null)
+  port     = lookup(var.target_group_settings[count.index], "target_port", null)
+  protocol = lookup(var.target_group_settings[count.index], "target_protocol", null)
+  vpc_id   = lookup(var.target_group_settings[count.index], "vpc_id", null)
   #target_type = lookup(var.target_group_settings[count.index], "target_type", null)
 
   dynamic "health_check" {
     for_each = length(keys(lookup(var.target_group_settings[count.index], "health_check", {}))) == 0 ? [] : [lookup(var.target_group_settings[count.index], "health_check", {})]
-    
+
     content {
       healthy_threshold   = lookup(health_check.value, "healthy_threshold", null)
       unhealthy_threshold = lookup(health_check.value, "unhealthy_threshold", null)

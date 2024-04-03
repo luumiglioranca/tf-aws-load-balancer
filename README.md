@@ -2,7 +2,7 @@
 
 Bem vindos ao código para provisionamento de um ALB e seus componentes via terraform :)
 
-Neste diretório vocês acharão 3 diretórios, cada diretório com um módulo e com uma arquitetura diferente.
+Neste diretório vocês acharão 4 diretórios, cada diretório com um módulo e com uma arquitetura diferente.
 
 **_Caso de uso_**: 
 
@@ -12,7 +12,7 @@ Neste diretório vocês acharão 3 diretórios, cada diretório com um módulo e
 
 3: **_`load-balancer+listener-rule-80+redirect`_** - Código IaC responsável pela criaçao de um application load balancer, listener, listener rule na porta 80, security group com regras default e também um redirect para a porta 443.
 
-4: **_`nlb+listener-rule-443+target-group`_** - Código IaC responsável pela criaçao de um network load balancer, listener + listener rule na porta 443, gerando comunicação com a criação do target group e também atachando em um ALB existente (conta local)
+4: **_`nlb+listener-rule-443+target-group`_** - Código IaC responsável pela criaçao de um network load balancer, listener + listener rule na porta 443, gerando comunicação com a criação do target group e também atachando em um ALB existente (conta local). Lembrando que esse recurso será criado para se comunicar com um API Gateway existente.
 
 **_Importante:_** A documentação da haschicorp é bem completa, se quiserem dar uma olhada, segue o link do glossário com todos os recursos do terraform: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 

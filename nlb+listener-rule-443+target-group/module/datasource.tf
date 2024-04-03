@@ -35,3 +35,7 @@ data "aws_acm_certificate" "domain_ssl" {
   statuses = ["ISSUED"]
 }
 
+#Encontrando o nome do API GTW criado anteriormente :)
+data "aws_api_gateway_rest_api" "main" {
+  name = local.api_gateway_name
+}

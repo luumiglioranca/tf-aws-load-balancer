@@ -98,3 +98,7 @@ variable "target_group_settings" {
   type    = any
   default = []
 }
+
+variable "load_balancer_arn" {
+  type    = string
+}
