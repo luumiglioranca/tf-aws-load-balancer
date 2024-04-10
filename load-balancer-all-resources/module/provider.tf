@@ -9,7 +9,8 @@ locals {
   alb_internal = ""
   vpc_id       = ""
   account_id   = ""
-  #subnets      = ["subnet-0a57763c40d757152", "subnet-0801fdff20634df95"]
+  domain_name  = ""
+  cidr_blocks  = "" #Range Inteno da VPC (Conta Local)
 
   /* CONFIGURAÇÕES DO CONTAINER */
   container_port     = ""
@@ -26,7 +27,6 @@ locals {
   }
 
   # VARIÁVEIS GLOBAIS [PADRONIZADAS] - OBS: NÃO SE FAZ NECESSÁRIO REALIZAR A TROCA DE NENHUMA VARIÁVEL DESTE BLOCO !!!
-  domain_name                        = "edtech.com.br"
   region                             = "us-east-1"
   cloudwatch_retention               = "14"
   launch_type                        = "EC2"
@@ -51,44 +51,49 @@ locals {
   status_code                        = "HTTP_301"
 
   # CONFIGURAÇÕES INGRESS RULE - SECURITY GROUP*/
-  description         = "Acesso Interno - VPC HUB"
+  description         = "Acesso Interno"
   from_port           = "0"
   to_port             = "65535"
   protocol            = "tcp"
   security_group_type = "ingress"
   tcp_protocol        = "tcp"
-  cidr_blocks         = "10.107.40.0/22"
 }
 
-##################################################################################################
-#                                                                                                #
-#                        PROVIDER AWS + ROLE ATLANTIS + TFSTATE FILE - S3 BUCKET                 #
-#                                                                                                #
-##################################################################################################
+########################################################################################################
+#                                                                                                      #
+#                                     CONNECT PROVIDER - AWS    :)                                     #
+#                                                                                                      #
+########################################################################################################
 
 provider "aws" {
-  region = local.region
-  #profile = "ops-payer"
+  #Região onde será configurado seu recurso. Deixei us-east-1 como default
+  region = "us-east-1"
 
+  #Conta mãe que será responsável pelo provisionamento do recurso.
+  profile = ""
+
+  #Assume Role necessária para o provisionamento de recurso, caso seja via role.
   assume_role {
-    role_arn = "arn:aws:iam::${local.account_id}:role/AtlantisRole"
-    #role_arn = "arn:aws:iam::${local.account_id}:role/OrganizationAccountAccessRole"
+    role_arn = "" #Role que será assumida pela sua conta principal :)
   }
 }
 
-provider "aws" {
-  alias  = "atena"
-  region = local.region
-  #profile = "atena"
-}
-
+#Configurações de backend, neste caso para armazenar o estado do recurso via Bucket S3.
 terraform {
   backend "s3" {
-    role_arn = "arn:aws:iam::424747098912:role/AtlantisRole"
-    #profile                     = "ops-payer"
-    bucket                      = "s3-compasso-uol-424747098912-tfstate"
-    key                         = ""
-    region                      = "us-east-1"
+    #Profile (conta) de onde está o bucket que você irá armazenar seu tfstate 
+    profile = ""
+
+    #Nome do Bucket
+    bucket = ""
+
+    #Caminho da chave para o recurso que será criado
+    key = "caminho-da-chave/exemplo/terraform.tfstate"
+
+    #Região onde será configurado seu recurso. Deixei us-east-1 como default
+    region = "us-east-1"
+
+    #Valores de segurança. Encriptação, Validação de credenciais e Check da API.
     encrypt                     = true
     skip_credentials_validation = true
     skip_metadata_api_check     = true
