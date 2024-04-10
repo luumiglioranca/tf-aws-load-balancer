@@ -9,7 +9,7 @@ locals {
   vpc_id                   = ""
   account_id               = ""
   alb_arn_to_nlb_listener  = ""
- domain_name               = ""
+  domain_name              = ""
 
   /* CONFIGURAÇÕES DO LOAD BALANCER & HEALTH CHECK (TARGET GROUP) */
   health_check_path = ""
@@ -78,7 +78,7 @@ terraform {
     bucket = ""
 
     #Caminho da chave para o recurso que será criado
-    key = "caminho-da-chave/exemplo/vpc-peering/terraform.tfstate"
+    key = "caminho-da-chave/exemplo/terraform.tfstate"
 
     #Região onde será configurado seu recurso. Deixei us-east-1 como default
     region = "us-east-1"
